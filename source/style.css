@@ -1,0 +1,70 @@
+.label {
+    /* add style rules here to change how the label appears */
+    margin: .75rem 0;
+}
+
+.hint {
+    /* add style rules here to change how the hint appears */
+    margin: .5rem 0;
+    color: rgba(0,0,0,.65);
+    font-style: italic;
+}
+
+.response {
+    margin: .5rem 0;
+    padding: .5rem;
+    border: 1px solid #047CC2;
+    box-sizing: border-box;
+    min-width: 33%; /* Ensure input gets at least 1/3 of the space */
+    flex-grow: 1; /* Allow input to grow and take available space */
+    flex-shrink: 0; /* Don't let it shrink below min-width */
+}
+
+.is-read-only .response {
+    /* this affects how the input appears when the field is marked read only */
+    outline: none;
+    background-color: rgba(0,0,0,.07);
+    border: 1px solid rgba(0,0,0,.3);
+}
+
+/* classes below added for format symbol field plug-in */
+.symbol {
+    font-weight: bold;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 0.25rem;
+    max-width: 33%; /* Default max width if not overridden by JS */
+    min-width: 0; /* Allow shrinking below content size if needed */
+    flex-shrink: 1;
+}
+.hide-symbol {
+    display: none; /*hides the element to which it is applied*/
+}
+/* classes for format symbol field plug-in end here */
+
+.input-wrapper {
+    display: flex;
+    align-items: center; /* Keep vertical centering */
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.field-container {
+    width: 100%;
+    position: relative;
+}
+
+#symbol-below {
+    margin-top: 0.25rem;
+    font-weight: bold;
+    word-wrap: break-word;
+    white-space: normal;
+    width: 100%; /* ensures wrapping aligns with field */
+    display: block; /* ensure it's on a new line */
+    text-align: center; /* centers the text */
+    max-width: 100%; /* Override the max-width from .symbol class */
+}
