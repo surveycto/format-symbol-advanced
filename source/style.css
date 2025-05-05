@@ -10,47 +10,58 @@
     font-style: italic;
 }
 
-.response {
+.response { /* Input field */
     margin: .5rem 0;
     padding: .5rem;
     border: 1px solid #047CC2;
     box-sizing: border-box;
-    min-width: 33%; /* Ensure input gets at least 1/3 of the space */
-    flex-grow: 1; /* Allow input to grow and take available space */
-    flex-shrink: 0; /* Don't let it shrink below min-width */
+    /* Default behavior: Grow to fill space, don't shrink below content */
+    flex-grow: 1; /* Default: input grows */
+    flex-shrink: 1; /* Allow shrinking */
+    flex-basis: 0%; /* Start from 0 and grow */
+    min-width: 33%; /* Sensible minimum width */
 }
 
-.is-read-only .response {
-    /* this affects how the input appears when the field is marked read only */
-    outline: none;
-    background-color: rgba(0,0,0,.07);
-    border: 1px solid rgba(0,0,0,.3);
-}
+/* ... (read-only styles) ... */
 
-/* classes below added for format symbol field plug-in */
 .symbol {
     font-weight: bold;
-    white-space: normal;
+    white-space: normal; /* Allow wrapping */
     word-wrap: break-word;
     overflow-wrap: break-word;
     display: inline-block;
     vertical-align: middle;
     padding: 0 0.25rem;
-    max-width: 33%; /* Default max width if not overridden by JS */
-    min-width: 0; /* Allow shrinking below content size if needed */
+    text-align: center;
+    box-sizing: border-box;
+    flex-grow: 0; /* Default: symbols DO NOT grow */
     flex-shrink: 1;
+    flex-basis: auto; /* Default: size based on content */
+    min-width: 0;
+    /* max-width will be controlled by JS */
 }
+
+/* Specific alignment for symbols */
+#symbol-left {
+    text-align: right; /* Align text towards the input */
+}
+
+#symbol-right {
+    text-align: left; /* Align text towards the input */
+}
+
+
 .hide-symbol {
-    display: none; /*hides the element to which it is applied*/
+    display: none;
 }
-/* classes for format symbol field plug-in end here */
 
 .input-wrapper {
     display: flex;
-    align-items: center; /* Keep vertical centering */
+    align-items: center;
     gap: 0.5rem;
     flex-wrap: nowrap;
     width: 100%;
+    justify-content: flex-start; /* Explicitly align items to the start (left in LTR) */
 }
 
 .field-container {
@@ -66,5 +77,4 @@
     width: 100%; /* ensures wrapping aligns with field */
     display: block; /* ensure it's on a new line */
     text-align: center; /* centers the text */
-    max-width: 100%; /* Override the max-width from .symbol class */
 }

@@ -5,9 +5,9 @@ var isIOS = (document.body.className.indexOf("ios-collect") >= 0);
 
 // Get parameters
 var leftSymbol = getPluginParameter("left");
-var rightSymbol = getPluginParameter("right"); 
+var rightSymbol = getPluginParameter("right");
 var belowSymbol = getPluginParameter("below");
-var symbolWidth = getPluginParameter("symbol-width");
+var fieldWidthParam = getPluginParameter("field-width"); // Use field-width parameter
 
 // Get DOM elements
 var input = document.getElementById('decimal-field');
@@ -16,104 +16,181 @@ var rightLabel = document.querySelector("#symbol-right");
 var belowLabel = document.querySelector("#symbol-below");
 var inputWrapper = document.querySelector(".input-wrapper");
 
-// Handle symbol visibility
+// --- Symbol Visibility ---
+var hasLeftSymbol = false;
 if (leftSymbol) {
     leftLabel.textContent = leftSymbol;
     leftLabel.classList.remove("hide-symbol");
+    hasLeftSymbol = true;
 } else {
     leftLabel.classList.add("hide-symbol");
+    leftLabel.textContent = ''; // Clear content if hidden
 }
 
+var hasRightSymbol = false;
 if (rightSymbol) {
     rightLabel.textContent = rightSymbol;
     rightLabel.classList.remove("hide-symbol");
+    hasRightSymbol = true;
 } else {
     rightLabel.classList.add("hide-symbol");
+    rightLabel.textContent = ''; // Clear content if hidden
 }
 
-// Add handling for the below symbol
 if (belowSymbol) {
     belowLabel.textContent = belowSymbol;
     belowLabel.classList.remove("hide-symbol");
 } else {
     belowLabel.classList.add("hide-symbol");
+    belowLabel.textContent = ''; // Clear content if hidden
 }
 
-// Handle specific width adjustments if specified - use symbolWidth instead of fieldWidth
-if (symbolWidth && inputWrapper) {
-    let percent;
-    if (symbolWidth === "half") percent = 50;
-    else if (symbolWidth === "quarter") percent = 25;
-    else if (symbolWidth === "third") percent = 33.33;
-    else if (symbolWidth === "two-thirds") percent = 66.67;
-    else if (!isNaN(symbolWidth)) percent = parseFloat(symbolWidth);
+// --- Width Calculation Logic ---
 
-    if (percent > 0 && percent < 100) {
-        // Calculate the remaining space for the input field
-        const inputWidth = 100 - percent;
-        
-        // For symbols, decide if we need to split the specified width
-        if (leftSymbol && rightSymbol) {
-            // Both symbols exist, so split the specified width
-            const symbolWidthPercent = percent / 2;
-            
-            // Set up left symbol
-            leftLabel.style.maxWidth = `${symbolWidthPercent}%`;
-            
-            // Set up right symbol
-            rightLabel.style.maxWidth = `${symbolWidthPercent}%`;
-            
-            // Input gets remaining space
-            input.style.minWidth = `${inputWidth}%`;
-        } 
-        else if (leftSymbol) {
-            // Only left symbol exists
-            leftLabel.style.maxWidth = `${percent}%`;
-            input.style.minWidth = `${inputWidth}%`;
+// Reset inline styles before applying new ones to rely on CSS defaults first
+input.style.flexGrow = '';
+input.style.flexShrink = '';
+input.style.flexBasis = '';
+input.style.maxWidth = '';
+input.style.minWidth = '';
+leftLabel.style.flexGrow = '';
+leftLabel.style.flexShrink = '';
+leftLabel.style.flexBasis = '';
+leftLabel.style.maxWidth = '';
+rightLabel.style.flexGrow = '';
+rightLabel.style.flexShrink = '';
+rightLabel.style.flexBasis = '';
+rightLabel.style.maxWidth = '';
+
+if (fieldWidthParam && inputWrapper) {
+    // --- Behavior WITH field-width parameter ---
+    let inputPercent;
+    // Parse parameter value (keywords or direct percentage)
+    if (fieldWidthParam === "half") inputPercent = 50;
+    else if (fieldWidthParam === "quarter") inputPercent = 25;
+    else if (fieldWidthParam === "third") inputPercent = 33.33;
+    else if (fieldWidthParam === "two-thirds") inputPercent = 66.67;
+    else if (fieldWidthParam === "fifth") inputPercent = 20; // Example: 20%
+    else if (!isNaN(fieldWidthParam)) inputPercent = parseFloat(fieldWidthParam);
+    else inputPercent = null; // Invalid parameter value
+
+    if (inputPercent !== null && inputPercent > 0 && inputPercent < 100) {
+        const symbolsTotalPercent = 100 - inputPercent;
+
+        // --- Input field takes the specified fixed width percentage ---
+        input.style.flexBasis = `${inputPercent}%`;
+        input.style.flexGrow = '0';   // Don't grow
+        input.style.flexShrink = '0';  // Don't shrink
+        input.style.minWidth = `${inputPercent}%`; // Ensure it doesn't get smaller than basis
+
+        // --- Symbols take natural width, don't grow, but have max-width ---
+        const symbolFlexGrow = '0';     // Symbols should NOT grow
+        const symbolFlexShrink = '1';   // Allow shrinking if needed
+        const symbolFlexBasis = 'auto'; // Base size on content
+
+        if (hasLeftSymbol && hasRightSymbol) {
+            const maxSymbolWidth = symbolsTotalPercent / 2;
+            leftLabel.style.flexGrow = symbolFlexGrow;
+            leftLabel.style.flexShrink = symbolFlexShrink;
+            leftLabel.style.flexBasis = symbolFlexBasis;
+            leftLabel.style.maxWidth = `${maxSymbolWidth}%`;
+            rightLabel.style.flexGrow = symbolFlexGrow;
+            rightLabel.style.flexShrink = symbolFlexShrink;
+            rightLabel.style.flexBasis = symbolFlexBasis;
+            rightLabel.style.maxWidth = `${maxSymbolWidth}%`;
+        } else if (hasLeftSymbol) {
+            leftLabel.style.flexGrow = symbolFlexGrow;
+            leftLabel.style.flexShrink = symbolFlexShrink;
+            leftLabel.style.flexBasis = symbolFlexBasis;
+            leftLabel.style.maxWidth = `${symbolsTotalPercent}%`;
+        } else if (hasRightSymbol) {
+            rightLabel.style.flexGrow = symbolFlexGrow;
+            rightLabel.style.flexShrink = symbolFlexShrink;
+            rightLabel.style.flexBasis = symbolFlexBasis;
+            rightLabel.style.maxWidth = `${symbolsTotalPercent}%`;
         }
-        else if (rightSymbol) {
-            // Only right symbol exists
-            rightLabel.style.maxWidth = `${percent}%`;
-            input.style.minWidth = `${inputWidth}%`;
-        }
+    } else {
+        console.warn("Invalid field-width parameter value. Falling back to default behavior.");
+        applyDefaultWidthBehavior();
     }
+} else {
+    // --- Default behavior WITHOUT field-width parameter ---
+    applyDefaultWidthBehavior();
 }
 
-// Find the input element
-var input = document.getElementById('decimal-field');
-
-// Restricts input for the given textbox to the given inputFilter.
-function setInputFilter(textbox, inputFilter) {
-    function restrictInput() {
-        if (inputFilter(this.value)) {
-            this.oldSelectionStart = this.selectionStart;
-            this.oldSelectionEnd = this.selectionEnd;
-            this.oldValue = this.value;
-        } else if (this.hasOwnProperty("oldValue")) {
-            this.value = this.oldValue;
-            this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
-        } else {
-            this.value = "";
-        }
+function applyDefaultWidthBehavior() {
+    // Input field grows (flex-grow: 1 from CSS)
+    // Symbols take auto basis, don't grow (flex-grow: 0 from CSS), shrink (flex-shrink: 1 from CSS)
+    if (hasLeftSymbol && hasRightSymbol) {
+        leftLabel.style.maxWidth = '33.33%';
+        rightLabel.style.maxWidth = '33.33%';
+    } else if (hasLeftSymbol) {
+        leftLabel.style.maxWidth = '66.67%';
+    } else if (hasRightSymbol) {
+        rightLabel.style.maxWidth = '66.67%';
     }
-
-    // Truncate to 15 chars.
-    textbox.value = textbox.value.substring(0, 15);
-
-    // Apply restriction when typing, copying/pasting, dragging-and-dropping, etc.
-    textbox.addEventListener("input", restrictInput);
-    textbox.addEventListener("keydown", restrictInput);
-    textbox.addEventListener("keyup", restrictInput);
-    textbox.addEventListener("mousedown", restrictInput);
-    textbox.addEventListener("mousedown", restrictInput);
-    textbox.addEventListener("contextmenu", restrictInput);
-    textbox.addEventListener("drop", restrictInput);
+    // Input field width is handled by its default flex-grow: 1 in CSS, taking remaining space.
 }
+
+
+// --- Input Filtering and Other Functions ---
 
 // Checks whether an input should be treated like an empty decimal value.
 function isEmptyDecimal(value) {
     return value === "" || value === "-" || value === "." || value === "-.";
 }
+
+// Restricts input for the given textbox to the given inputFilter.
+function setInputFilter(textbox, inputFilter) {
+    function restrictInput() {
+        // Store cursor position and value before filtering
+        let originalValue = this.value;
+        let originalStart = this.selectionStart;
+        let originalEnd = this.selectionEnd;
+        let valueChangedByTruncation = false; // Flag to track if value was changed specifically by truncation
+
+        // Truncate to 15 characters *before* validation
+        if (this.value.length > 15) {
+           this.value = this.value.substring(0, 15);
+           valueChangedByTruncation = true;
+           // Adjust potential cursor position if truncation happened
+           originalStart = Math.min(originalStart, 15);
+           originalEnd = Math.min(originalEnd, 15);
+        }
+
+        if (inputFilter(this.value)) { // Validate the (potentially truncated) value
+            // Value is valid
+            this.oldSelectionStart = this.selectionStart;
+            this.oldSelectionEnd = this.selectionEnd;
+            this.oldValue = this.value;
+            // Save the valid (potentially truncated) value
+            setAnswer(isEmptyDecimal(this.value) ? "" : this.value);
+
+            // If the value was changed *only* by truncation, restore the adjusted cursor position
+            if (valueChangedByTruncation) {
+                this.setSelectionRange(originalStart, originalEnd);
+            }
+        } else if (this.hasOwnProperty("oldValue")) {
+            // Value is invalid, revert to the last known valid value
+            this.value = this.oldValue;
+            // Try to restore cursor position to where it was before the invalid change
+            this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+            // No need to call setAnswer here, the value is reverting to the last saved state
+        } else {
+            // Value is invalid and there's no history, clear it
+            this.value = "";
+            this.oldValue = ""; // Update oldValue as well
+            this.oldSelectionStart = 0;
+            this.oldSelectionEnd = 0;
+            // Save the empty value
+            setAnswer("");
+        }
+    }
+
+    // Apply restriction logic on the 'input' event
+    textbox.addEventListener("input", restrictInput);
+}
+
 
 // If the field is not marked readonly, then restrict input to decimal only.
 if(!fieldProperties.READONLY) {
@@ -127,53 +204,42 @@ if(!fieldProperties.READONLY) {
         }
     }
 
-    // For iOS, we'll default the inputmode to "numeric", unless some specific value is
-    // passed as plug-in parameter.
+    // Platform-specific inputmode handling
     if (isIOS) {
         var inputModeIOS = getPluginParameter("inputmode-ios");
-        if (inputModeIOS === undefined) {
-            inputModeIOS = "numeric";
-        }
-        setInputMode(inputModeIOS);
-    }
-    // For Android, we'll default the inputmode to "decimal" (as defined in the template.html) file,
-    // unless some specific value is passed as plug-in parameter.
-    else if (isAndroid) {
+        setInputMode(inputModeIOS === undefined ? "numeric" : inputModeIOS);
+    } else if (isAndroid) {
         var inputModeAndroid = getPluginParameter("inputmode-android");
-        if (inputModeAndroid !== undefined) {
-            setInputMode(inputModeAndroid);
-        }
-    }
-    // For WebCollect, we'll default the inputmode to "decimal" (as defined in the template.html) file,
-    // unless some specific value is passed as plug-in parameter.
-    else if (isWebCollect) {
+        if (inputModeAndroid !== undefined) setInputMode(inputModeAndroid);
+        // else keep default from template.html ("decimal")
+    } else if (isWebCollect) {
         var inputModeWebCollect = getPluginParameter("inputmode-web");
-        if (inputModeWebCollect !== undefined) {
-            setInputMode(inputModeWebCollect);
-        }
+        if (inputModeWebCollect !== undefined) setInputMode(inputModeWebCollect);
+        // else keep default from template.html ("decimal")
     }
 
+    // Apply the input filter (which now also handles setAnswer)
     setInputFilter(input, function (value) {
-        // Empty value.
+        // Allow empty/intermediate states
         if (isEmptyDecimal(value)) {
             return true;
         }
-
-        // Only 15 characters allowed.
-        if (value.length > 15) {
-            return false;
-        }
-
-        // Only allow digits (optionally with one decimal separator) to be entered.
-        // A negative sign at the beginning is also allowed.
-        return /^-?\d*[.]?\d*$/.test(value);
+        // Regex check for valid decimal format (already truncated in restrictInput)
+        return /^-?\d*\.?\d*$/.test(value);
     });
 }
 
 // Define what happens when the user attempts to clear the response
 function clearAnswer() {
     input.value = '';
-} 
+    if (!fieldProperties.READONLY) {
+        // Update internal state if needed
+        input.oldValue = '';
+        input.oldSelectionStart = 0;
+        input.oldSelectionEnd = 0;
+    }
+    setAnswer(''); // Update the underlying answer
+}
 
 // If the field is not marked readonly, then focus on the field and show the on-screen keyboard (for mobile devices)
 function setFocus() {
@@ -185,13 +251,12 @@ function setFocus() {
     }
 }
 
-// Save the user's response (update the current answer)
-input.oninput = function() {
-    setAnswer(isEmptyDecimal(input.value) ? "" : input.value);
-};
+// REMOVED redundant input.oninput handler - setAnswer is now called within setInputFilter
 
 // If the field label or hint contain any HTML that isn't in the form definition, then the < and > characters will have been replaced by their HTML character entities, and the HTML won't render. We need to turn those HTML entities back to actual < and > characters so that the HTML renders properly. This will allow you to render HTML from field references in your field label or hint.
 function unEntity(str){
+    // Check if str is null or undefined before trying to replace
+    if (str == null) return '';
     return str.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
 }
 if (fieldProperties.LABEL) {
@@ -199,4 +264,30 @@ if (fieldProperties.LABEL) {
 }
 if (fieldProperties.HINT) {
     document.querySelector(".hint").innerHTML = unEntity(fieldProperties.HINT);
+}
+
+// Set the initial value from the fieldProperties and ensure it's clean
+// (Value is set in template, but let's ensure filter logic state is initialized)
+if (!fieldProperties.READONLY) {
+    let initialValue = input.value;
+    // Apply initial truncation if necessary
+    if (initialValue.length > 15) {
+        initialValue = initialValue.substring(0, 15);
+        input.value = initialValue; // Update display
+    }
+    // Validate initial value
+    const isValidInitial = isEmptyDecimal(initialValue) || /^-?\d*\.?\d*$/.test(initialValue);
+    if (isValidInitial) {
+        input.oldValue = initialValue;
+        setAnswer(isEmptyDecimal(initialValue) ? "" : initialValue);
+    } else {
+        // Handle invalid initial value (e.g., clear it)
+        input.value = "";
+        input.oldValue = "";
+        setAnswer("");
+        console.warn("Initial field value was invalid and has been cleared.");
+    }
+    // Set initial cursor state for filter history
+    input.oldSelectionStart = input.selectionStart;
+    input.oldSelectionEnd = input.selectionEnd;
 }
