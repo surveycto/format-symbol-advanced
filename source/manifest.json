@@ -1,0 +1,8 @@
+{
+	"name" : "Advanced format symbol",
+	"author" : "Dobility",
+	"version": "1.0.3",
+	"supportedFieldTypes": ["decimal"],
+	"hideDefaultRequiredMessage": false,
+	"hideDefaultConstraintMessage": false
+}
