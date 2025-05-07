@@ -28,7 +28,7 @@ This field plug-in requires the `decimal` field type.
 
 **To use this plug-in as-is**
 
-1. Download the [sample form](https://github.com/surveycto/format-symbol-advanced/raw/main/extras/sample-form/Sample%20form%20-%20Format%20symbol%20advanced%20field%20plug-in.xlsx) from this repo and upload it to your SurveyCTO server.
+1. Download the [sample form](https://github.com/surveycto/format-symbol-advanced/raw/57ffd24d34a99958a2dfcac894eea012da0f8f0e/extras/sample-form/Sample%20form%20-%20Advanced%20format%20symbol%20field%20plug-in.xlsx) from this repo and upload it to your SurveyCTO server.
 2. Download the [format-symbol-advanced.fieldplugin.zip](https://github.com/surveycto/format-symbol-advanced/raw/main/format-symbol-advanced.fieldplugin.zip) file from this repo, and attach it to the sample form on your SurveyCTO server.
 
 ### Parameters
@@ -78,7 +78,7 @@ custom-format-symbol-advanced(below='All prices in USD', field-width='third')
 ## More resources
 
 * **Sample form**   
-[Download sample form](https://github.com/surveycto/format-symbo-advanced/raw/main/extras/sample-form/Sample%20form%20-%20Format%20symbol%20field%20plug-in.xlsx)  
+[Download sample form](https://github.com/surveycto/format-symbol-advanced/raw/57ffd24d34a99958a2dfcac894eea012da0f8f0e/extras/sample-form/Sample%20form%20-%20Advanced%20format%20symbol%20field%20plug-in.xlsx)  
 
 * **Developer documentation**  
 Instructions and resources for developing your own field plug-ins.  
