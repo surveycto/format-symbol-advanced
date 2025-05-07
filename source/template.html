@@ -1,0 +1,82 @@
+<!-- This is the field label from the form definition -->
+<div class="label default-question-text-size" dir="auto">{{{LABEL}}}</div>
+
+<!-- If there is an image specified in the media:image column, show it here -->
+{{#MEDIAIMAGE}}
+    <img src="{{MEDIAIMAGE}}" />
+{{/MEDIAIMAGE}}
+
+<!-- If there is audio specified in the media:audio column, show it here -->
+{{#MEDIAAUDIO}}
+    <audio controls controlsList="nodownload">
+        <source src="{{MEDIAAUDIO}}">
+        Your browser does not support the audio element.
+    </audio>
+{{/MEDIAAUDIO}}
+
+<!-- If there is a video specified in the media:video column, show it here -->
+{{#MEDIAVIDEO}}
+    <video width="100%" height="*" controls controlsList="nodownload">
+        <source src="{{MEDIAVIDEO}}">
+        Your browser does not support the video tag.
+    </video>
+{{/MEDIAVIDEO}}
+
+<div class="hint default-hint-text-size" dir="auto">{{{HINT}}}</div>
+
+<!-- If the field is marked read only, then only show the input box if there is a current answer. -->
+{{#READONLY}}
+    {{#CURRENT_ANSWER}}
+    <input 
+        type="text" 
+        pattern = "[0-9]*"
+        inputmode = "decimal"
+        value="{{CURRENT_ANSWER}}" 
+        id="decimal-field" 
+        class="response default-answer-text-size" 
+        readonly
+    />
+    {{/CURRENT_ANSWER}}
+{{/READONLY}}
+
+<!-- if the field is not marked read only, show the input box always. -->
+{{^READONLY}}
+<!-- This is the label which shows on the left of the input box. It has the following attributes:
+        id - name of the label element used to refer to it in the JavaScript code.
+        for - the input element it is attached to (here its the one below).
+        class - used to point to the CSS class to be applied
+-->
+<div class="field-container">
+    <div class="input-wrapper">
+        <label 
+            id="symbol-left" 
+            for="decimal-field"
+            class="symbol hide-symbol" 
+        ></label>
+        <!-- First label ends here -->
+        <input 
+            type="text" 
+            pattern = "[0-9]*" 
+            inputmode="decimal"
+            value="{{CURRENT_ANSWER}}" 
+            id="decimal-field" 
+            class="response default-answer-text-size"
+            {{#QUESTION_PLACEHOLDER_LABEL}}
+            placeholder="{{QUESTION_PLACEHOLDER_LABEL}}"
+            {{/QUESTION_PLACEHOLDER_LABEL}}
+            {{^QUESTION_PLACEHOLDER_LABEL}}
+            placeholder="Your answer here..."
+            {{/QUESTION_PLACEHOLDER_LABEL}} 
+        />
+        <!-- Second label starts here. It displays on the right of the input box when enabled. It is hidden by default because of the extra
+        CSS class called hide-symbol (check the CSS file for this class)-->
+        <label 
+            id="symbol-right" 
+            for="decimal-field"
+            class="symbol hide-symbol" 
+        ></label>
+        <!-- Second label ends here-->
+    </div> 
+    <div id="symbol-below" class="symbol hide-symbol"></div>
+</div>
+{{/READONLY}}

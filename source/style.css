@@ -1,0 +1,80 @@
+.label {
+    /* add style rules here to change how the label appears */
+    margin: .75rem 0;
+}
+
+.hint {
+    /* add style rules here to change how the hint appears */
+    margin: .5rem 0;
+    color: rgba(0,0,0,.65);
+    font-style: italic;
+}
+
+.response { /* Input field */
+    margin: .5rem 0;
+    padding: .5rem;
+    border: 1px solid #047CC2;
+    box-sizing: border-box;
+    /* Default behavior: Grow to fill space, don't shrink below content */
+    flex-grow: 1; /* Default: input grows */
+    flex-shrink: 1; /* Allow shrinking */
+    flex-basis: 0%; /* Start from 0 and grow */
+    min-width: 33%; /* Sensible minimum width */
+}
+
+/* ... (read-only styles) ... */
+
+.symbol {
+    font-weight: bold;
+    white-space: normal; /* Allow wrapping */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 0.25rem;
+    text-align: center;
+    box-sizing: border-box;
+    flex-grow: 0; /* Default: symbols DO NOT grow */
+    flex-shrink: 1;
+    flex-basis: auto; /* Default: size based on content */
+    min-width: 0;
+    /* max-width will be controlled by JS */
+}
+
+/* Specific alignment for symbols */
+#symbol-left {
+    text-align: right; /* Align text towards the input */
+}
+
+#symbol-right {
+    text-align: left; /* Align text towards the input */
+}
+
+
+.hide-symbol {
+    display: none;
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+    width: 100%;
+    justify-content: flex-start; /* Explicitly align items to the start (left in LTR) */
+}
+
+.field-container {
+    width: 100%;
+    position: relative;
+}
+
+#symbol-below {
+    margin-top: 0.25rem;
+    font-weight: bold;
+    word-wrap: break-word;
+    white-space: normal;
+    width: 100%; /* ensures wrapping aligns with field */
+    display: block; /* ensure it's on a new line */
+    text-align: center; /* centers the text */
+}
