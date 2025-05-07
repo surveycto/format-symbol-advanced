@@ -6,7 +6,7 @@
 
 This field plug-in displays symbols before, after, or below an input field with flexible layout options. It allows for precise control over symbol placement and sizing, making it ideal for formatting monetary values, measurements, or any data that requires consistent presentation.
 
-[![Download now](extras/download-button.png)](https://github.com/surveycto/format-symbol/raw/master/format-symbol.fieldplugin.zip)
+[![Download now](extras/download-button.png)](https://github.com/surveycto/format-symbol-advanced/raw/main/format-symbol-advanced.fieldplugin.zip)
 
 ### Features
 
@@ -28,8 +28,8 @@ This field plug-in requires the `decimal` field type.
 
 **To use this plug-in as-is**
 
-1. Download the [sample form](https://github.com/surveycto/format-symbol-advanced/raw/master/extras/sample-form/Sample%20form%20-%20Format%20symbol%20advanced%20field%20plug-in.xlsx) from this repo and upload it to your SurveyCTO server.
-2. Download the [format-symbol-advanced.fieldplugin.zip](https://github.com/surveycto/format-symbol-advanced/raw/master/format-symbol-advanced.fieldplugin.zip) file from this repo, and attach it to the sample form on your SurveyCTO server.
+1. Download the [sample form](https://github.com/surveycto/format-symbol-advanced/raw/main/extras/sample-form/Sample%20form%20-%20Format%20symbol%20advanced%20field%20plug-in.xlsx) from this repo and upload it to your SurveyCTO server.
+2. Download the [format-symbol-advanced.fieldplugin.zip](https://github.com/surveycto/format-symbol-advanced/raw/main/format-symbol-advanced.fieldplugin.zip) file from this repo, and attach it to the sample form on your SurveyCTO server.
 
 ### Parameters
 
@@ -78,7 +78,7 @@ custom-format-symbol-advanced(below='All prices in USD', field-width='third')
 ## More resources
 
 * **Sample form**   
-[Download sample form](https://github.com/surveycto/format-symbol/raw/master/extras/sample-form/Sample%20form%20-%20Format%20symbol%20field%20plug-in.xlsx)  
+[Download sample form](https://github.com/surveycto/format-symbo-advanced/raw/main/extras/sample-form/Sample%20form%20-%20Format%20symbol%20field%20plug-in.xlsx)  
 
 * **Developer documentation**  
 Instructions and resources for developing your own field plug-ins.  
