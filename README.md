@@ -12,11 +12,11 @@ This plug-in extends the functionality of the basic [format-symbol](https://gith
 
 ### Features
 
-1.  Add symbols to the left, right, or below the input field
-2.  Flexible layout with intelligent space distribution 
-3.  Configurable input field width as a percentage of available space
-4.  Proper text wrapping for symbols and vertical alignment of inline elements
-5.  Horizontal centering for symbols below the input row
+1.  Add symbols to the left, right, or below the input field.
+2.  Flexible layout with intelligent space distribution.
+3.  Configurable input field width as a percentage of available space.
+4.  Proper text wrapping for symbols and vertical alignment of inline elements.
+5.  Horizontal centering for symbols below the input row.
 
 This field plug-in also inherits functionality from the [baseline-decimal](https://github.com/surveycto/baseline-decimal) field plug-in.
 
